@@ -2,6 +2,7 @@ package com.lambdaschool.school.service;
 
 import com.lambdaschool.school.SchoolApplicationTests;
 import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;
@@ -10,7 +11,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
-import static org.junit.jupiter.api.Assertions.*;
+
+import javax.persistence.EntityNotFoundException;
+
+import static junit.framework.TestCase.assertEquals;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest(classes = SchoolApplicationTests.class)
@@ -51,8 +55,12 @@ class CourseServiceImplTest
 	@Test
 	void deleteNotFound()
 	{
-		courseService.delete(3291);
+		Assertions.assertThrows(EntityNotFoundException.class, () -> {
+			courseService.delete(3291);
+		});
+
 		assertEquals(6, courseService.findAll().size());
+
 	}
 
 	@Test

@@ -48,7 +48,16 @@ class CourseServiceImplTest
 	}
 
 	@Test
-	void delete()
+	void deleteNotFound()
 	{
+		courseService.delete(3291);
+		assertEquals(6, courseService.findAll().size());
+	}
+
+	@Test
+	void deleteFound()
+	{
+		courseService.delete(1);
+		assertEquals(5, courseService.findAll().size());
 	}
 }

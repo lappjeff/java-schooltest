@@ -34,6 +34,7 @@ class CourseServiceImplTest
 	@Test
 	void findAll()
 	{
+		assertEquals(6, courseService.findAll().size());
 	}
 
 	@Test

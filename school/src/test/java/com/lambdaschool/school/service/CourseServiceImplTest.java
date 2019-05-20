@@ -66,7 +66,7 @@ class CourseServiceImplTest
 	@Test
 	void deleteFound()
 	{
-		courseService.delete(1);
+		courseService.delete(3);
 		assertEquals(5, courseService.findAll().size());
 	}
 }

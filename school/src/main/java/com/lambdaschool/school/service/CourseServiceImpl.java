@@ -36,6 +36,7 @@ public class CourseServiceImpl implements CourseService
         return courserepos.findById(id).orElseThrow(() -> new EntityNotFoundException(Long.toString(id)));
     }
 
+
     @Transactional
     @Override
     public void delete(long id) throws EntityNotFoundException

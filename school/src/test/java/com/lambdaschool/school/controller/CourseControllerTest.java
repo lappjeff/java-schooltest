@@ -1,29 +1,40 @@
 package com.lambdaschool.school.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.lambdaschool.school.SchoolApplicationTests;
 import com.lambdaschool.school.model.Course;
 import com.lambdaschool.school.model.Instructor;
 import com.lambdaschool.school.model.Student;
 import com.lambdaschool.school.service.CourseService;
+import com.lambdaschool.school.service.InstructorService;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.runner.RunWith;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.RequestBuilder;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
+import org.springframework.test.web.servlet.result.MockMvcResultHandlers;
 
 import java.util.ArrayList;
 
-import static junit.framework.TestCase.assertNotNull;
 import static junit.framework.TestCase.assertEquals;
+//import static org.junit.Assert.assertEquals;
+import static org.mockito.ArgumentMatchers.any;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+@RunWith(SpringRunner.class)
 @WebMvcTest(value = CourseController.class)
+@ContextConfiguration(classes = SchoolApplicationTests.class)
 class CourseControllerTest
 {
 
@@ -32,6 +43,9 @@ class CourseControllerTest
 
 	@MockBean
 	private CourseService courseService;
+
+	@MockBean
+	private InstructorService instructorService;
 
 	private ArrayList<Course> courses = new ArrayList<>();
 
@@ -79,6 +93,31 @@ class CourseControllerTest
 	{
 	}
 
+	@Test
+	void addNewCourse() throws Exception
+	{
+		String url = "/courses/course/add";
+
+		Instructor instructor = instructorService.findById(1);
+
+		Course course = new Course("Test Course", instructor);
+
+		course.getStudents().add(new Student("Test Jim"));
+
+		Mockito.when(courseService.save(any(Course.class))).thenReturn(course);
+
+		course.setCourseid(5341);
+
+		ObjectMapper mapper = new ObjectMapper();
+		String courseStr = mapper.writeValueAsString(course);
+
+		RequestBuilder rb = MockMvcRequestBuilders.post(url).contentType(MediaType.APPLICATION_JSON).
+				content(courseStr).accept(MediaType.APPLICATION_JSON);
+
+		mockMvc.perform(rb).andExpect(status().isCreated()).andDo(MockMvcResultHandlers.print());
+
+
+	}
 
 	@Test
 	void deleteCourseById()

@@ -1,6 +1,9 @@
 package com.lambdaschool.school.service;
 
 import com.lambdaschool.school.SchoolApplicationTests;
+import com.lambdaschool.school.model.Course;
+import com.lambdaschool.school.model.Instructor;
+import com.lambdaschool.school.model.Student;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -15,6 +18,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 import javax.persistence.EntityNotFoundException;
 
 import static junit.framework.TestCase.assertEquals;
+import static junit.framework.TestCase.assertNotNull;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest(classes = SchoolApplicationTests.class)
@@ -23,6 +27,8 @@ class CourseServiceImplTest
 
 	@Autowired
 	private CourseService courseService;
+	@Autowired
+	private InstructorService instructorService;
 
 	@BeforeEach
 	void setUp()
@@ -61,6 +67,24 @@ class CourseServiceImplTest
 
 		assertEquals(6, courseService.findAll().size());
 
+	}
+
+	@Test
+	void save()
+	{
+		Instructor instructor = instructorService.findById(1);
+
+		Course course = new Course("Test Course", instructor);
+
+		course.getStudents().add(new Student("Test Jim"));
+
+		Course savedCourse = courseService.save(course);
+
+		assertNotNull(savedCourse);
+
+		Course foundCourse = courseService.findCourseById(savedCourse.getCourseid());
+
+		assertEquals(course.getCoursename(), foundCourse.getCoursename());
 	}
 
 	@Test

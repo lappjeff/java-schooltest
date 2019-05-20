@@ -20,6 +20,7 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
 import java.util.ArrayList;
 
+import static junit.framework.TestCase.assertNotNull;
 import static junit.framework.TestCase.assertEquals;
 
 @WebMvcTest(value = CourseController.class)
@@ -77,6 +78,7 @@ class CourseControllerTest
 	void getCountStudentsInCourses()
 	{
 	}
+
 
 	@Test
 	void deleteCourseById()

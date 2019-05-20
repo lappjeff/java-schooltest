@@ -37,12 +37,13 @@ public class CourseServiceImpl implements CourseService
         return courserepos.findById(id).orElseThrow(() -> new EntityNotFoundException(Long.toString(id)));
     }
 
+    @Transactional
     @Override
     public Course save(Course course)
     {
         Course newCourse = new Course();
 
-        newCourse.setCoursename("Co-cane 101");
+        newCourse.setCoursename(course.getCoursename());
         newCourse.setInstructor(course.getInstructor());
 
         return courserepos.save(newCourse);

@@ -36,11 +36,7 @@ public class CourseControllerIntegrationTest
 	@Autowired
 	private WebApplicationContext webApplicationContext;
 
-//	@MockBean
-//	private InstructorService instructorService;
-//
-//	@MockBean
-//	private CourseService courseService;
+
 	@Before
 	public void init()
 	{

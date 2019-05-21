@@ -11,6 +11,7 @@ import org.springframework.transaction.annotation.Transactional;
 import javax.persistence.EntityNotFoundException;
 import java.util.ArrayList;
 
+@Transactional
 @Service(value = "courseService")
 public class CourseServiceImpl implements CourseService
 {
@@ -35,6 +36,19 @@ public class CourseServiceImpl implements CourseService
     public Course findCourseById(long id) throws EntityNotFoundException
     {
         return courserepos.findById(id).orElseThrow(() -> new EntityNotFoundException(Long.toString(id)));
+    }
+
+    @Override
+    public Course findCourseByName(String name) throws EntityNotFoundException
+    {
+        Course course = courserepos.findCourseByCoursename(name);
+
+        if(course == null)
+        {
+            throw new EntityNotFoundException("Course " + name + " not found.");
+        }
+
+        return course;
     }
 
     @Transactional

@@ -1,6 +1,7 @@
 package com.lambdaschool.school.service;
 
 import com.lambdaschool.school.model.Course;
+import com.lambdaschool.school.model.Student;
 import com.lambdaschool.school.repository.CourseRepository;
 import com.lambdaschool.school.view.CountStudentsInCourses;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,6 +11,7 @@ import org.springframework.transaction.annotation.Transactional;
 import javax.persistence.EntityNotFoundException;
 import java.util.ArrayList;
 
+@Transactional
 @Service(value = "courseService")
 public class CourseServiceImpl implements CourseService
 {
@@ -28,6 +30,37 @@ public class CourseServiceImpl implements CourseService
     public ArrayList<CountStudentsInCourses> getCountStudentsInCourse()
     {
         return courserepos.getCountStudentsInCourse();
+    }
+
+    @Override
+    public Course findCourseById(long id) throws EntityNotFoundException
+    {
+        return courserepos.findById(id).orElseThrow(() -> new EntityNotFoundException(Long.toString(id)));
+    }
+
+    @Override
+    public Course findCourseByName(String name) throws EntityNotFoundException
+    {
+        Course course = courserepos.findCourseByCoursename(name);
+
+        if(course == null)
+        {
+            throw new EntityNotFoundException("Course " + name + " not found.");
+        }
+
+        return course;
+    }
+
+    @Transactional
+    @Override
+    public Course save(Course course)
+    {
+        Course newCourse = new Course();
+
+        newCourse.setCoursename(course.getCoursename());
+        newCourse.setInstructor(course.getInstructor());
+
+        return courserepos.save(newCourse);
     }
 
     @Transactional

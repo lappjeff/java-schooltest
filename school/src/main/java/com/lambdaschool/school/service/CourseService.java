@@ -12,4 +12,10 @@ public interface CourseService
     ArrayList<CountStudentsInCourses> getCountStudentsInCourse();
 
     void delete(long id);
+
+    Course findCourseById(long id);
+
+    Course save(Course course);
+
+    Course findCourseByName(String name);
 }
